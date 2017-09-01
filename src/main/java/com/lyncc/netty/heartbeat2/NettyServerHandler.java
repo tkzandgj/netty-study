@@ -13,6 +13,12 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<BaseMsg> {
         NettyChannelMap.remove((SocketChannel) ctx.channel());
     }
 
+    /**
+     * 读取客户端请求的数据
+     * @param ctx
+     * @param msg
+     * @throws Exception
+     */
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, BaseMsg msg) throws Exception {
         if (MsgType.LOGIN.equals(msg.getType())) {
@@ -30,12 +36,13 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<BaseMsg> {
         }
         switch (msg.getType()){
             case PING:{
+                //收到客户端的ping请求
                 PingMsg pingMsg=(PingMsg)msg;
                 PingMsg replyPing=new PingMsg();
                 NettyChannelMap.get(pingMsg.getClientId()).writeAndFlush(replyPing);
             }
             break;
-            case ASK:{
+            case ACK:{
                 //收到客户端的请求
                 AskMsg askMsg=(AskMsg)msg;
                 if("authToken".equals(askMsg.getParams().getAuth())){
