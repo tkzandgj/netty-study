@@ -4,7 +4,7 @@ public class AskMsg extends BaseMsg {
     
     public AskMsg() {
         super();
-        setType(MsgType.ASK);
+        setType(MsgType.ACK);
     }
     
     private AskParams params;
