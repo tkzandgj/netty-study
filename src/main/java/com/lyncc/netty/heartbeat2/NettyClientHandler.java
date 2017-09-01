@@ -23,6 +23,13 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<BaseMsg> {
             }
         }
     }
+
+    /**
+     * 读取服务端返回的消息
+     * @param channelHandlerContext
+     * @param baseMsg
+     * @throws Exception
+     */
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, BaseMsg baseMsg) throws Exception {
         MsgType msgType=baseMsg.getType();
@@ -35,15 +42,18 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<BaseMsg> {
                 channelHandlerContext.writeAndFlush(loginMsg);
             }break;
             case PING:{
+                //收到服务端的ping请求
                 System.out.println("receive ping from server----------");
             }break;
-            case ASK:{
+            case ACK:{
+                //收到服务端的请求
                 ReplyClientBody replyClientBody=new ReplyClientBody("client info **** !!!");
                 ReplyMsg replyMsg=new ReplyMsg();
                 replyMsg.setBody(replyClientBody);
                 channelHandlerContext.writeAndFlush(replyMsg);
             }break;
             case REPLY:{
+                //收到服务端的回复
                 ReplyMsg replyMsg=(ReplyMsg)baseMsg;
                 ReplyServerBody replyServerBody=(ReplyServerBody)replyMsg.getBody();
                 System.out.println("receive client msg: "+replyServerBody.getServerInfo());
