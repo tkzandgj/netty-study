@@ -29,29 +29,30 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<BaseMsg> {
             }
         }
         switch (msg.getType()){
-        case PING:{
-            PingMsg pingMsg=(PingMsg)msg;
-            PingMsg replyPing=new PingMsg();
-            NettyChannelMap.get(pingMsg.getClientId()).writeAndFlush(replyPing);
-        }break;
-        case ASK:{
-            //收到客户端的请求
-            AskMsg askMsg=(AskMsg)msg;
-            if("authToken".equals(askMsg.getParams().getAuth())){
-                ReplyServerBody replyBody=new ReplyServerBody("server info");
-                ReplyMsg replyMsg=new ReplyMsg();
-                replyMsg.setBody(replyBody);
-                NettyChannelMap.get(askMsg.getClientId()).writeAndFlush(replyMsg);
+            case PING:{
+                PingMsg pingMsg=(PingMsg)msg;
+                PingMsg replyPing=new PingMsg();
+                NettyChannelMap.get(pingMsg.getClientId()).writeAndFlush(replyPing);
             }
-        }break;
-        case REPLY:{
-            //收到客户端回复
-            ReplyMsg replyMsg=(ReplyMsg)msg;
-            ReplyClientBody clientBody=(ReplyClientBody)replyMsg.getBody();
-            System.out.println("receive client msg: "+clientBody.getClientInfo());
-        }break;
-        default:break;
-    }
+            break;
+            case ASK:{
+                //收到客户端的请求
+                AskMsg askMsg=(AskMsg)msg;
+                if("authToken".equals(askMsg.getParams().getAuth())){
+                    ReplyServerBody replyBody=new ReplyServerBody("server info");
+                    ReplyMsg replyMsg=new ReplyMsg();
+                    replyMsg.setBody(replyBody);
+                    NettyChannelMap.get(askMsg.getClientId()).writeAndFlush(replyMsg);
+                }
+            }break;
+            case REPLY:{
+                //收到客户端回复
+                ReplyMsg replyMsg=(ReplyMsg)msg;
+                ReplyClientBody clientBody=(ReplyClientBody)replyMsg.getBody();
+                System.out.println("receive client msg: "+clientBody.getClientInfo());
+            }break;
+            default:break;
+        }
         ReferenceCountUtil.release(msg);
     }
     
