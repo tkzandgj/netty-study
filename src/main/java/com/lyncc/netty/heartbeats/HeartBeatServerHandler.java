@@ -21,6 +21,17 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
                     ctx.channel().close();
                 }
             }
+            //客户端没有发送消息之后，   服务端就会打印没有接收到客户端的消息
+            /*/127.0.0.1:51877->Server :Heartbeat
+            server channelRead..
+            /127.0.0.1:51877->Server :Heartbeat
+            server channelRead..
+            /127.0.0.1:51877->Server :Heartbeat
+            server channelRead..
+            /127.0.0.1:51877->Server :Heartbeat
+            5 秒没有接收到客户端的信息了
+            5 秒没有接收到客户端的信息了
+            5 秒没有接收到客户端的信息了*/
         } else {
             super.userEventTriggered(ctx, evt);
         }
