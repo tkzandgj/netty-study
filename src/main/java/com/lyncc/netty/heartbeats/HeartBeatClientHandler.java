@@ -40,7 +40,21 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;
             if (event.state() == IdleState.WRITER_IDLE) {
-                if(currentTime <= TRY_TIMES){
+                if(currentTime <= TRY_TIMES){   //超过这个次数没有向服务端去发送消息的时候   那么服务端就会去监控
+                    //下面客户端的数据可以看出来    在第五次的时候已经大于TRY_TIMES    所以不向服务端发送消息了
+                    /*激活时间是：Sat Sep 02 10:47:25 GMT+08:00 2017
+                    HeartBeatClientHandler channelActive
+                    循环触发时间：Sat Sep 02 10:47:29 GMT+08:00 2017
+                    currentTime:0
+                    循环触发时间：Sat Sep 02 10:47:33 GMT+08:00 2017
+                    currentTime:1
+                    循环触发时间：Sat Sep 02 10:47:37 GMT+08:00 2017
+                    currentTime:2
+                    循环触发时间：Sat Sep 02 10:47:41 GMT+08:00 2017
+                    currentTime:3
+                    循环触发时间：Sat Sep 02 10:47:45 GMT+08:00 2017
+                    循环触发时间：Sat Sep 02 10:47:49 GMT+08:00 2017
+                    循环触发时间：Sat Sep 02 10:47:53 GMT+08:00 2017*/
                     System.out.println("currentTime:"+currentTime);
                     currentTime++;
                     ctx.channel().writeAndFlush(HEARTBEAT_SEQUENCE.duplicate());
