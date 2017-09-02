@@ -40,7 +40,8 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;
             if (event.state() == IdleState.WRITER_IDLE) {
-                if(currentTime <= TRY_TIMES){   //超过这个次数没有向服务端去发送消息的时候   那么服务端就会去监控
+                if(currentTime <= TRY_TIMES){
+                    //超过这个次数没有向服务端去发送消息的时候   那么服务端就会去监控
                     //下面客户端的数据可以看出来    在第五次的时候已经大于TRY_TIMES    所以不向服务端发送消息了
                     /*激活时间是：Sat Sep 02 10:47:25 GMT+08:00 2017
                     HeartBeatClientHandler channelActive
